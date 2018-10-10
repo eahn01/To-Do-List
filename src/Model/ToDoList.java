@@ -12,19 +12,27 @@ public class ToDoList {
         loadList(todoList);
         while (true){
             System.out.println("Would you like to: [1] Add an item   "+
-                    "[2] Cross off an item   "+
+                    "[2] Complete an item   "+
                     "[3] View items to do   "+
                     "[4] View completed items   "+
                     "[5] Quit");
             option = scanner.nextInt();
             scanner.nextLine();
             if (option == 1 ) {
-                addTask(todoList);
+                System.out.println("Type of item: [1] Regular Item    "+
+                            "[2] Urgent Item");
+                int choose = scanner.nextInt();
+                scanner.nextLine();
+                if (choose == 1) {
+                    addRegTask(todoList);
+                }
+                if (choose == 2) {
+                    addUrgTask(todoList);
+                }
                 System.out.println("Item has been added to the list");
             }
             else if (option == 2) {
                 completeTask(todoList );
-                System.out.println("Item has been crossed off");
             }
             else if (option == 3) {
                 viewCurrent(todoList);
@@ -39,12 +47,23 @@ public class ToDoList {
         saveList(todoList);
     }
 
-    private void addTask(ItemList todoList) {
+    private void addRegTask(ItemList todoList) {
         System.out.println("Enter new item");
         String name = scanner.nextLine();
         System.out.println("Enter due date (dd/MM/yyyy)");
         String date = scanner.nextLine();
-        Item item = new Item(name, date);
+        Item item = new RegularItem(name);
+        item.setStatus();
+        item.setDueDate(date);
+        todoList.addItem(item);
+    }
+
+    private void addUrgTask(ItemList todoList) {
+        System.out.println("Enter new item");
+        String name = scanner.nextLine();
+        Item item = new UrgentItem(name);
+        item.setStatus();
+        item.setDueDate("");
         todoList.addItem(item);
     }
 

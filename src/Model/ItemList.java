@@ -34,8 +34,12 @@ public class ItemList implements Saveable, Loadable{
                 currentItems.remove(i);
                 completedItems.add(i);
                 i.changeStatus();
+                System.out.println("Item has been crossed off");
                 return;
             }
+            else
+                System.out.println("Item could not be found");
+                return;
         }
     }
 
@@ -77,7 +81,7 @@ public class ItemList implements Saveable, Loadable{
             System.out.print("Name: " +i.getName());
             System.out.print("   Status: "+i.getStatus());
             System.out.println("   DueDate: " +i.getDueDate());
-            writer.println(i.getName()+" "+i.getDueDate());
+            writer.println(i.getName()+" "+i.getStatus()+" "+i.getDueDate());
         }
         writer.close();
     }
@@ -86,8 +90,17 @@ public class ItemList implements Saveable, Loadable{
         List<String> lines = Files.readAllLines(Paths.get("MyToDoList.txt"));
         for (String line : lines) {
             ArrayList<String> partsOfLine = splitOnSpace(line);
-            Item item = new Item(partsOfLine.get(0), partsOfLine.get(1));
-            list.currentItems.add(item);
+            if (partsOfLine.get(1).equals("URGENT")) {
+                Item urgent = new UrgentItem(partsOfLine.get(0));
+                urgent.setStatus();
+                urgent.setDueDate("");
+                list.currentItems.add(urgent);
+            } else {
+                Item regular = new RegularItem(partsOfLine.get(0));
+                regular.setStatus();
+                regular.setDueDate(partsOfLine.get(3));
+                list.currentItems.add(regular);
+            }
         }
     }
 
@@ -99,9 +112,6 @@ public class ItemList implements Saveable, Loadable{
     public void saveCompleted(ItemList list) throws IOException {
         PrintWriter writer = new PrintWriter("MyCompletedList.txt", "UTF-8");
         for (Item i : list.completedItems) {
-//            System.out.print("Name: " +i.getName());
-//            System.out.print("   Status: "+i.getStatus());
-//            System.out.println("   DueDate: " +i.getDueDate());
             writer.println(i.getName()+" "+i.getDueDate());
         }
         writer.close();
