@@ -1,5 +1,8 @@
 package Model;
 
+import Exceptions.ItemNotFound;
+import Exceptions.TooManyItems;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -9,10 +12,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ItemList implements Saveable, Loadable{
-    String item = "";
     private ArrayList<Item> currentItems;
     private ArrayList<Item> completedItems;
 
+    // EFFECTS: creates a list of items with a current list and completed list
     public ItemList() {
         currentItems = new ArrayList<>();
         completedItems = new ArrayList<>();
@@ -21,26 +24,35 @@ public class ItemList implements Saveable, Loadable{
     // REQUIRES:
     // MODIFIES: this
     // EFFECTS: adds item to current list
-    public void addItem(Item addedItem) {
+    public void addItem(Item addedItem) throws TooManyItems {
+        if (currentItems.size() >= 10) {
+            throw new TooManyItems();
+        }
         currentItems.add(addedItem);
     }
 
     // REQUIRES:
     // MODIFIES: this
     // EFFECTS: removes item from current list and adds to completed
-    public void completeItem(String completeItem) {
-        for (Item i : currentItems) {
-            if (i.getName().equals(completeItem)) {
-                currentItems.remove(i);
-                completedItems.add(i);
-                i.changeStatus();
-                System.out.println("Item has been crossed off");
-                return;
+    public void completeItem(String completeItem) throws ItemNotFound {
+        for (int i=0; i <= currentItems.size(); i++) {
+            if (i == currentItems.size()) {
+                throw new ItemNotFound();
+            } else if (currentItems.get(i).getName().equals(completeItem)) {
+                currentItems.get(i).changeStatus();
+                completedItems.add(currentItems.get(i));
+                currentItems.remove(currentItems.get(i));
             }
-            else
-                System.out.println("Item could not be found");
-                return;
+
         }
+//        for (Item i : currentItems) {
+//            if (i.getName().equals(completeItem)) {
+//                currentItems.remove(i);
+//                completedItems.add(i);
+//                i.changeStatus();
+//                return;
+//            }
+//        }
     }
 
     // EFFECTS: returns true if list contains item
@@ -57,6 +69,7 @@ public class ItemList implements Saveable, Loadable{
         return currentItems;
     }
 
+    // EFFECTS: prints out the items in the currentItems list
     public void printCurrentItems() {
         if (currentItems.size() >= 1)
         for (Item i : currentItems) {
@@ -66,6 +79,7 @@ public class ItemList implements Saveable, Loadable{
             System.out.println("No items to do");
     }
 
+    // EFFECTS: prints out the items in the completedItems list
     public void printCompletedItems(){
         if (completedItems.size() >= 1)
         for (Item i : completedItems) {

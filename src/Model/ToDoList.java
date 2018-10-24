@@ -1,5 +1,8 @@
 package Model;
 
+import Exceptions.ItemNotFound;
+import Exceptions.TooManyItems;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -11,28 +14,44 @@ public class ToDoList {
         int option;
         loadList(todoList);
         while (true){
-            System.out.println("Would you like to: [1] Add an item   "+
-                    "[2] Complete an item   "+
-                    "[3] View items to do   "+
-                    "[4] View completed items   "+
+            System.out.println("\nWould you like to: \n"+
+                    "[1] Add an item \n"+
+                    "[2] Complete an item \n"+
+                    "[3] View items to do \n"+
+                    "[4] View completed items \n"+
                     "[5] Quit");
             option = scanner.nextInt();
             scanner.nextLine();
             if (option == 1 ) {
-                System.out.println("Type of item: [1] Regular Item    "+
+                System.out.println("Type of item: \n"+
+                        "[1] Regular Item \n"+
                             "[2] Urgent Item");
                 int choose = scanner.nextInt();
                 scanner.nextLine();
                 if (choose == 1) {
-                    addRegTask(todoList);
+                    try {
+                        addRegTask(todoList);
+                    } catch (TooManyItems tooManyItems) {
+                        System.out.println("Too many items on todo list. Please cross something off.");
+                        continue;
+                    }
                 }
                 if (choose == 2) {
-                    addUrgTask(todoList);
+                    try {
+                        addUrgTask(todoList);
+                    } catch (TooManyItems tooManyItems) {
+                        System.out.println("Too many items on todo list. Please cross something off.");
+                        continue;
+                    }
                 }
-                System.out.println("Item has been added to the list");
             }
             else if (option == 2) {
-                completeTask(todoList );
+                try {
+                    completeTask(todoList );
+                } catch (ItemNotFound itemNotFound) {
+                    System.out.println("Item could not be found. Please try again.");
+                    continue;
+                }
             }
             else if (option == 3) {
                 viewCurrent(todoList);
@@ -47,30 +66,33 @@ public class ToDoList {
         saveList(todoList);
     }
 
-    private void addRegTask(ItemList todoList) {
-        System.out.println("Enter new item");
+    private void addRegTask(ItemList todoList) throws TooManyItems {
+        System.out.println("Enter new item:");
         String name = scanner.nextLine();
-        System.out.println("Enter due date (dd/MM/yyyy)");
+        System.out.println("Enter due date (dd/MM/yyyy):");
         String date = scanner.nextLine();
         Item item = new RegularItem(name);
         item.setStatus();
         item.setDueDate(date);
         todoList.addItem(item);
+        System.out.println("Item has been added to the list.");
     }
 
-    private void addUrgTask(ItemList todoList) {
-        System.out.println("Enter new item");
+    private void addUrgTask(ItemList todoList) throws TooManyItems {
+        System.out.println("Enter new item:");
         String name = scanner.nextLine();
         Item item = new UrgentItem(name);
         item.setStatus();
         item.setDueDate("");
         todoList.addItem(item);
+        System.out.println("Item has been added to the list.");
     }
 
-    private void completeTask(ItemList todoList) {
-        System.out.println("Enter item to be crossed off");
+    private void completeTask(ItemList todoList) throws ItemNotFound {
+        System.out.println("Enter item to be crossed off:");
         String name = scanner.nextLine();
         todoList.completeItem(name);
+        System.out.println("Item has been crossed off.");
     }
 
     private void viewCurrent(ItemList todoList) {
