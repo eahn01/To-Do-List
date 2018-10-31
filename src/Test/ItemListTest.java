@@ -147,6 +147,7 @@ public class ItemListTest {
         }
         try {
             itmList.addItem(i11);
+            fail("no exceptions thrown");
         } catch (TooManyItems tooManyItems) {
             // do nothing
         }
@@ -177,6 +178,7 @@ public class ItemListTest {
         }
         try {
             itmList.completeItem("homework");
+            fail("no exceptions thrown");
         } catch (ItemNotFound itemNotFound) {
             // do nothing
         }

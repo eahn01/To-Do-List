@@ -7,18 +7,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class ItemList implements Saveable, Loadable{
-    private ArrayList<Item> currentItems;
-    private ArrayList<Item> completedItems;
+    private HashMap<String, Item> currentItems;
+    private HashMap<String, Item> completedItems;
 
     // EFFECTS: creates a list of items with a current list and completed list
     public ItemList() {
-        currentItems = new ArrayList<>();
-        completedItems = new ArrayList<>();
+        currentItems = new HashMap<>();
+        completedItems = new HashMap<>();
     }
 
     // REQUIRES:
@@ -28,52 +26,52 @@ public class ItemList implements Saveable, Loadable{
         if (currentItems.size() >= 10) {
             throw new TooManyItems();
         }
-        currentItems.add(addedItem);
+        currentItems.put(addedItem.getName(), addedItem);
     }
 
     // REQUIRES:
     // MODIFIES: this
     // EFFECTS: removes item from current list and adds to completed
     public void completeItem(String completeItem) throws ItemNotFound {
-        for (int i=0; i <= currentItems.size(); i++) {
-            if (i == currentItems.size()) {
-                throw new ItemNotFound();
-            } else if (currentItems.get(i).getName().equals(completeItem)) {
-                currentItems.get(i).changeStatus();
-                completedItems.add(currentItems.get(i));
-                currentItems.remove(currentItems.get(i));
-            }
+        if (!currentItems.containsKey(completeItem)) {
+            throw new ItemNotFound();
+        } else {currentItems.get(completeItem).changeStatus();
+            completedItems.put(completeItem, currentItems.get(completeItem));
+            currentItems.remove(completeItem);
+
+//        for (int i=0; i <= currentItems.size(); i++) {
+//            if (i == currentItems.size()) {
+//                throw new ItemNotFound();
+//            } else if (currentItems.get(i).getName().equals(completeItem)) {
+//                currentItems.get(i).changeStatus();
+//                completedItems.add(currentItems.get(i));
+//                currentItems.remove(currentItems.get(i));
+//            }
 
         }
-//        for (Item i : currentItems) {
-//            if (i.getName().equals(completeItem)) {
-//                currentItems.remove(i);
-//                completedItems.add(i);
-//                i.changeStatus();
-//                return;
-//            }
-//        }
     }
 
     // EFFECTS: returns true if list contains item
     public boolean currentContains(Item i) {
-        return currentItems.contains(i);
+        return currentItems.containsValue(i);
     }
 
     // EFFECTS: returns true if list contains item
     public boolean completedContains(Item i) {
-        return completedItems.contains(i);
+        return completedItems.containsValue(i);
     }
 
-    public ArrayList<Item> getCurrent() {
+    public HashMap<String, Item> getCurrent() {
         return currentItems;
     }
 
     // EFFECTS: prints out the items in the currentItems list
     public void printCurrentItems() {
         if (currentItems.size() >= 1)
-        for (Item i : currentItems) {
-            System.out.println("Name: "+i.getName()+"   Status: "+i.getStatus()+"   DueDate: "+i.getDueDate());
+        for (Map.Entry<String, Item> entry : currentItems.entrySet()) {
+            System.out.println("Name: "+entry.getKey()+
+                    "   Status: "+entry.getValue().getStatus()+
+                    "   DueDate: "+entry.getValue().getDueDate());
         }
         else
             System.out.println("No items to do");
@@ -82,8 +80,9 @@ public class ItemList implements Saveable, Loadable{
     // EFFECTS: prints out the items in the completedItems list
     public void printCompletedItems(){
         if (completedItems.size() >= 1)
-        for (Item i : completedItems) {
-            System.out.println("Name: "+i.getName()+"   Status: "+i.getStatus());
+        for (Map.Entry<String, Item> entry : completedItems.entrySet()) {
+            System.out.println("Name: "+entry.getKey()+
+                    "   Status: "+entry.getValue().getStatus());
         }
         else
             System.out.println("No items have been completed");
@@ -91,11 +90,11 @@ public class ItemList implements Saveable, Loadable{
 
     public void save(ItemList list) throws IOException {
         PrintWriter writer = new PrintWriter("MyToDoList.txt", "UTF-8");
-        for (Item i : list.currentItems) {
-            System.out.print("Name: " +i.getName());
-            System.out.print("   Status: "+i.getStatus());
-            System.out.println("   DueDate: " +i.getDueDate());
-            writer.println(i.getName()+" "+i.getStatus()+" "+i.getDueDate());
+        for (Map.Entry<String, Item> entry : currentItems.entrySet()) {
+            System.out.print("Name: " +entry.getKey());
+            System.out.print("   Status: "+entry.getValue().getStatus());
+            System.out.println("   DueDate: " +entry.getValue().getDueDate());
+            writer.println(entry.getKey()+" "+entry.getValue().getStatus()+" "+entry.getValue().getDueDate());
         }
         writer.close();
     }
@@ -108,12 +107,12 @@ public class ItemList implements Saveable, Loadable{
                 Item urgent = new UrgentItem(partsOfLine.get(0));
                 urgent.setStatus();
                 urgent.setDueDate("");
-                list.currentItems.add(urgent);
+                list.currentItems.put(partsOfLine.get(0), urgent);
             } else {
                 Item regular = new RegularItem(partsOfLine.get(0));
                 regular.setStatus();
                 regular.setDueDate(partsOfLine.get(3));
-                list.currentItems.add(regular);
+                list.currentItems.put(partsOfLine.get(0), regular);
             }
         }
     }
@@ -123,12 +122,12 @@ public class ItemList implements Saveable, Loadable{
         return new ArrayList<>(Arrays.asList(split));
     }
 
-    public void saveCompleted(ItemList list) throws IOException {
-        PrintWriter writer = new PrintWriter("MyCompletedList.txt", "UTF-8");
-        for (Item i : list.completedItems) {
-            writer.println(i.getName()+" "+i.getDueDate());
-        }
-        writer.close();
-    }
+//    public void saveCompleted(ItemList list) throws IOException {
+//        PrintWriter writer = new PrintWriter("MyCompletedList.txt", "UTF-8");
+//        for (Item i : list.completedItems) {
+//            writer.println(i.getName()+" "+i.getDueDate());
+//        }
+//        writer.close();
+//    }
 
 }
