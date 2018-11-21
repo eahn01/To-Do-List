@@ -2,19 +2,23 @@ package Model;
 
 import Exceptions.ItemNotFound;
 import Exceptions.TooManyItems;
+import Observer.WelcomeMsgPrinter;
 
 import java.io.IOException;
+import java.util.Observable;
 import java.util.Scanner;
 
-public class ToDoList {
+public class ToDoList extends Observable {
     Scanner scanner = new Scanner(System.in);
     ItemList todoList = new ItemList();
 
     public void run() throws IOException {
         int option;
+        addObserver(new WelcomeMsgPrinter());
         loadList(todoList);
         while (true){
             System.out.println("\nWould you like to: \n"+
+                    "[0] View welcome message \n"+
                     "[1] Add an item \n"+
                     "[2] Complete an item \n"+
                     "[3] View items to do \n"+
@@ -22,6 +26,10 @@ public class ToDoList {
                     "[5] Quit");
             option = scanner.nextInt();
             scanner.nextLine();
+            if (option == 0) {
+                setChanged();
+                notifyObservers();
+            }
             if (option == 1 ) {
                 System.out.println("Type of item: \n"+
                         "[1] Regular Item \n"+

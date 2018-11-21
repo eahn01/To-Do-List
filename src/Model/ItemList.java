@@ -117,7 +117,7 @@ public class ItemList implements Saveable, Loadable{
         }
     }
 
-    public static ArrayList<String> splitOnSpace(String line) {
+    private static ArrayList<String> splitOnSpace(String line) {
         String[] split = line.split(" ");
         return new ArrayList<>(Arrays.asList(split));
     }
