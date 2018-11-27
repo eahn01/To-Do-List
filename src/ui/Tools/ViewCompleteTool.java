@@ -12,6 +12,11 @@ public class ViewCompleteTool extends ViewTool {
     }
 
     @Override
+    protected void addListener() {
+
+    }
+
+    @Override
     protected String getLabel() {
         return "View Completed";
     }

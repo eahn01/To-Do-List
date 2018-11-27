@@ -1,12 +1,10 @@
 package ui;
 
-import Model.TestList;
-import Model.ToDoList;
+import Model.ItemList;
 import ui.Tools.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -15,24 +13,29 @@ import java.util.List;
 public class TodoListUI extends JFrame {
     private static final int WIDTH = 900;
     private static final int HEIGHT = 800;
+    public ItemList itemList = new ItemList();
+    public JTextArea textArea = new JTextArea();
+    private JPanel textPanel = new JPanel();
 
     private List<Tool> tools = new ArrayList<>();
 
     // EFFECTS: creates the window for the to do list
-    public TodoListUI() throws MalformedURLException {
+    public TodoListUI() throws IOException {
         super("To-do List");
+        loadList(itemList);
         initializeGraphics();
     }
 
-    private void initialozeInteraction() {
+    private void initializeInteraction() {
 
     }
 
     // MODIFIES: this
     // EFFECTS: draws the JFrame window for the to do list, and makes the tools that will work on the to do list
-    private void initializeGraphics() throws MalformedURLException {
+    private void initializeGraphics() throws IOException {
         setLayout(new BorderLayout());
         setSize(WIDTH, HEIGHT);
+        viewCurrent(itemList);
         createTextPanel();
         createTools();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,8 +43,33 @@ public class TodoListUI extends JFrame {
     }
 
     private void createTextPanel() throws MalformedURLException {
-        TestList testList = new TestList();
-        add(testList, BorderLayout.WEST);
+        textPanel.setPreferredSize(new Dimension(WIDTH*2/3, HEIGHT));
+        textPanel.setBackground(Color.WHITE);
+
+        JEditorPane editorPane = new JEditorPane();
+        editorPane.setEditable(false);
+        setPreferredSize(new Dimension(WIDTH*2/3, HEIGHT));
+
+        try {
+            editorPane.setPage("https://www.ugrad.cs.ubc.ca/~cs210/2018w1/welcomemsg.html");
+        } catch (IOException e) {
+            System.out.println("exception caught");
+        }
+
+        textArea.setEditable(false);
+        textArea.setPreferredSize(new Dimension(WIDTH*2/3, HEIGHT));
+        textArea.setBackground(Color.WHITE);
+        String txt = "\nPlease choose an option: ";
+        textArea.append(txt);
+
+        textPanel.add(editorPane);
+        textPanel.add(textArea);
+
+        add(textPanel, BorderLayout.WEST);
+    }
+
+    public void setTextArea(String txt) {
+        textArea.append(txt);
     }
 
     // MODIFIES: this
@@ -93,6 +121,13 @@ public class TodoListUI extends JFrame {
         tools.add(viewComplete);
     }
 
+    public String viewCurrent(ItemList todoList) {
+        return todoList.printCurrentItems();
+    }
+
+    private void loadList(ItemList todoList) throws IOException{
+        todoList.load(todoList);
+    }
 
     public static void main(String[] args) throws IOException {
         new TodoListUI();

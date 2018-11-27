@@ -16,4 +16,9 @@ public class CompleteTool extends Tool {
         button = new JButton("Complete an Item");
         addToParent(parent, gc);
     }
+
+    @Override
+    protected void addListener() {
+
+    }
 }

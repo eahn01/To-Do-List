@@ -15,10 +15,13 @@ public abstract class Tool {
         createButton(parent, gc);
         addToParent(parent, gc);
         active = false;
+        addListener();
     }
 
     // EFFECTS: creates a button for the tool
     protected abstract void createButton(JComponent parent, GridBagConstraints gc);
+
+    protected abstract void addListener();
 
     // MODIFIES: parent
     // EFFECTS: adds the button to the parent component with the given constraints

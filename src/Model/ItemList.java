@@ -66,15 +66,17 @@ public class ItemList implements Saveable, Loadable{
     }
 
     // EFFECTS: prints out the items in the currentItems list
-    public void printCurrentItems() {
+    public String printCurrentItems() {
+        StringBuilder sb = new StringBuilder();
         if (currentItems.size() >= 1)
         for (Map.Entry<String, Item> entry : currentItems.entrySet()) {
-            System.out.println("Name: "+entry.getKey()+
-                    "   Status: "+entry.getValue().getStatus()+
-                    "   DueDate: "+entry.getValue().getDueDate());
+            sb.append("\nName: ").append(entry.getKey()).append("   Status: ")
+                    .append(entry.getValue().getStatus()).append("   DueDate: ")
+                    .append(entry.getValue().getDueDate());
         }
         else
-            System.out.println("No items to do");
+            sb.append("No items to do");
+        return sb.toString();
     }
 
     // EFFECTS: prints out the items in the completedItems list

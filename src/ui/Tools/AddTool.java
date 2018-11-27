@@ -16,4 +16,9 @@ public class AddTool extends Tool {
         button = new JButton("Add an item");
         addToParent(parent, gc);
     }
+
+    @Override
+    protected void addListener() {
+
+    }
 }

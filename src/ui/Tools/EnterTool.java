@@ -16,4 +16,9 @@ public class EnterTool extends Tool{
         button = new JButton("Enter");
         addToParent(parent, gc);
     }
+
+    @Override
+    protected void addListener() {
+
+    }
 }
