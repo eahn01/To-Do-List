@@ -15,7 +15,7 @@ public class ViewCurrentTool extends ViewTool {
 
     @Override
     protected void addListener() {
-        button.addActionListener(new ViewToolClickHandler());
+        button.addActionListener(new ViewCurrentToolClickHandler());
     }
 
     @Override
@@ -23,11 +23,11 @@ public class ViewCurrentTool extends ViewTool {
         return "View Current";
     }
 
-    private class ViewToolClickHandler implements ActionListener {
+    private class ViewCurrentToolClickHandler implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String text = todoList.viewCurrent(todoList.itemList);
-            todoList.setTextArea(text);
+           Toolkit.getDefaultToolkit().beep();
+           todoList.viewCurrent(todoList.itemList);
         }
     }
 }

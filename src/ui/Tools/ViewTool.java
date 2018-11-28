@@ -12,7 +12,7 @@ public abstract class ViewTool extends Tool {
     }
 
     @Override
-    protected void createButton(JComponent parent, GridBagConstraints gc) {
+    protected void createButton() {
         button = new JButton(getLabel());
     }
 

@@ -38,17 +38,23 @@ public class ItemList implements Saveable, Loadable{
         } else {currentItems.get(completeItem).changeStatus();
             completedItems.put(completeItem, currentItems.get(completeItem));
             currentItems.remove(completeItem);
-
-//        for (int i=0; i <= currentItems.size(); i++) {
-//            if (i == currentItems.size()) {
-//                throw new ItemNotFound();
-//            } else if (currentItems.get(i).getName().equals(completeItem)) {
-//                currentItems.get(i).changeStatus();
-//                completedItems.add(currentItems.get(i));
-//                currentItems.remove(currentItems.get(i));
-//            }
-
         }
+    }
+
+    // EFFECTS: print the given item
+    public String printItem(Item i) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\nName: ").append(i.getName()).append("    Status: ")
+                .append(i.getStatus()).append("    DueDate: ").append(i.getDueDate());
+        return sb.toString();
+    }
+
+    public String printCompletedItem(String name) {
+        Item i = completedItems.get(name);
+        StringBuilder sb = new StringBuilder();
+        sb.append("\nName: ").append(i.getName())
+                .append("    DueDate: ").append(i.getDueDate());
+        return sb.toString();
     }
 
     // EFFECTS: returns true if list contains item
@@ -70,24 +76,28 @@ public class ItemList implements Saveable, Loadable{
         StringBuilder sb = new StringBuilder();
         if (currentItems.size() >= 1)
         for (Map.Entry<String, Item> entry : currentItems.entrySet()) {
-            sb.append("\nName: ").append(entry.getKey()).append("   Status: ")
-                    .append(entry.getValue().getStatus()).append("   DueDate: ")
+            sb.append("\nName: ").append(entry.getKey()).append("    Status: ")
+                    .append(entry.getValue().getStatus()).append("    DueDate: ")
                     .append(entry.getValue().getDueDate());
         }
         else
-            sb.append("No items to do");
+            sb.append("\nNo items to do");
+
         return sb.toString();
     }
 
     // EFFECTS: prints out the items in the completedItems list
-    public void printCompletedItems(){
+    public String printCompletedItems(){
+        StringBuilder sb = new StringBuilder();
         if (completedItems.size() >= 1)
         for (Map.Entry<String, Item> entry : completedItems.entrySet()) {
-            System.out.println("Name: "+entry.getKey()+
-                    "   Status: "+entry.getValue().getStatus());
+            sb.append("\nName: ").append(entry.getKey()).append("   Status: ")
+                    .append(entry.getValue().getStatus());
         }
         else
-            System.out.println("No items have been completed");
+            sb.append("\nNo items have been completed");
+
+        return sb.toString();
     }
 
     public void save(ItemList list) throws IOException {
@@ -123,13 +133,4 @@ public class ItemList implements Saveable, Loadable{
         String[] split = line.split(" ");
         return new ArrayList<>(Arrays.asList(split));
     }
-
-//    public void saveCompleted(ItemList list) throws IOException {
-//        PrintWriter writer = new PrintWriter("MyCompletedList.txt", "UTF-8");
-//        for (Item i : list.completedItems) {
-//            writer.println(i.getName()+" "+i.getDueDate());
-//        }
-//        writer.close();
-//    }
-
 }
