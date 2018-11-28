@@ -13,10 +13,14 @@ public class AddItemDateField extends TextField {
         super(todoList, parent, gc);
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets text field to visible
     public void setVisible(boolean b) {
         textField.setVisible(b);
     }
 
+    // MODIFIES: this
+    // EFFECTS: constructs a new listener object and adds it to the text field
     @Override
     protected void addListener() {
         textField.getDocument().addDocumentListener(new AddItemDateHandler());
@@ -38,6 +42,8 @@ public class AddItemDateField extends TextField {
             changed();
         }
 
+        // MODIFIES: todoList
+        // EFFECTS: enables the add button if the text field is not empty and is the correct type of item
         public void changed() {
             String date = textField.getText();
             String selected = todoList.getSelected();

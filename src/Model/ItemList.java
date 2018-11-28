@@ -19,7 +19,6 @@ public class ItemList implements Saveable, Loadable{
         completedItems = new HashMap<>();
     }
 
-    // REQUIRES:
     // MODIFIES: this
     // EFFECTS: adds item to current list
     public void addItem(Item addedItem) throws TooManyItems {
@@ -29,7 +28,6 @@ public class ItemList implements Saveable, Loadable{
         currentItems.put(addedItem.getName(), addedItem);
     }
 
-    // REQUIRES:
     // MODIFIES: this
     // EFFECTS: removes item from current list and adds to completed
     public void completeItem(String completeItem) throws ItemNotFound {
@@ -49,6 +47,7 @@ public class ItemList implements Saveable, Loadable{
         return sb.toString();
     }
 
+    // EFFECTS: prints the item that was completed
     public String printCompletedItem(String name) {
         Item i = completedItems.get(name);
         StringBuilder sb = new StringBuilder();
@@ -91,7 +90,7 @@ public class ItemList implements Saveable, Loadable{
         StringBuilder sb = new StringBuilder();
         if (completedItems.size() >= 1)
         for (Map.Entry<String, Item> entry : completedItems.entrySet()) {
-            sb.append("\nName: ").append(entry.getKey()).append("   Status: ")
+            sb.append("Name: ").append(entry.getKey()).append("   Status: ")
                     .append(entry.getValue().getStatus());
         }
         else
@@ -100,6 +99,8 @@ public class ItemList implements Saveable, Loadable{
         return sb.toString();
     }
 
+    // MODIFIES: todoList text file
+    // EFFECTS: saves the items on todoList on to a text file
     public void save(ItemList list) throws IOException {
         PrintWriter writer = new PrintWriter("MyToDoList.txt", "UTF-8");
         for (Map.Entry<String, Item> entry : currentItems.entrySet()) {
@@ -111,6 +112,8 @@ public class ItemList implements Saveable, Loadable{
         writer.close();
     }
 
+    // MODIFIES: this
+    // EFFECTS: loads the items from the text file and adds them to the todoList
     public void load(ItemList list) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get("MyToDoList.txt"));
         for (String line : lines) {

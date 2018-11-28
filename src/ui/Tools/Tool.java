@@ -19,6 +19,7 @@ public abstract class Tool {
     // EFFECTS: creates a button for the tool
     protected abstract void createButton();
 
+    // EFFECTS: adds listener to the button
     protected abstract void addListener();
 
     // MODIFIES: parent
@@ -27,6 +28,8 @@ public abstract class Tool {
         parent.add(button, gc);
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets the button to enabled to disabled
     public void setEnabled(boolean b){
         button.setEnabled(b);
     }

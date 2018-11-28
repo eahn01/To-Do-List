@@ -13,6 +13,8 @@ public class AddItemNameField extends TextField {
         super(todoList, parent, gc);
     }
 
+    // MODIFIES: this
+    // EFFECTS: constructs a new listener object and adds it to the text field
     @Override
     protected void addListener() {
         textField.getDocument().addDocumentListener(new AddItemNameHandler());
@@ -34,6 +36,8 @@ public class AddItemNameField extends TextField {
             changed();
         }
 
+        // MODIFIES: todoList
+        // EFFECTS: enables the add button when text field is not empty and other conditions
         private void changed() {
             String name = textField.getText();
             String selected = todoList.getSelected();

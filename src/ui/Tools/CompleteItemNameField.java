@@ -13,6 +13,8 @@ public class CompleteItemNameField extends TextField {
         super(todoList, parent, gc);
     }
 
+    // MODIFIES: this
+    // EFFECTS: constructs a new listener and adds it to the text field
     @Override
     protected void addListener() {
         textField.getDocument().addDocumentListener(new CompleteItemNameHandler());
@@ -34,6 +36,8 @@ public class CompleteItemNameField extends TextField {
             changed();
         }
 
+        // MODIFIES: todoList
+        // EFFECTS: enables the button if the text field is not empty
         public void changed() {
             String name = todoList.getCompleteName();
             if (!name.isEmpty()) {

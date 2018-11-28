@@ -37,8 +37,6 @@ public class TodoListUI extends JFrame {
     public AddTool add;
     public CompleteTool complete;
 
-
-
     // EFFECTS: creates the window for the to do list
     public TodoListUI() throws IOException {
         super("To-do List");
@@ -68,6 +66,9 @@ public class TodoListUI extends JFrame {
         setVisible(true);
     }
 
+    // MODIFIES: this
+    // EFFECTS: creates the area where all messages will be printed to,
+    // has a title taken from the website and begins with current to do Items
     private void createTextPanel() {
         textPanel = new JPanel();
         textArea = new JTextArea();
@@ -91,8 +92,7 @@ public class TodoListUI extends JFrame {
 
         textArea.setEditable(false);
         textArea.setBackground(Color.WHITE);
-        String txt = "Please choose an option: ";
-        textArea.append(txt);
+        viewCurrent(itemList);
 
         textPanel.add(editorPane);
         textPanel.add(scroll);
@@ -100,12 +100,14 @@ public class TodoListUI extends JFrame {
         add(textPanel, BorderLayout.WEST);
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets the text in the text area to the given text
     public void setText(String txt) {
         textArea.setText(txt);
     }
 
     // MODIFIES: this
-    // EFFECTS: declares and instantiates all the tool buttons on the RH-side of the window
+    // EFFECTS: declares and instantiates all the tool buttons and add/complete areas on the RH-side of the window
     private void createTools() {
         Container toolContainer = getContentPane();
         toolArea = new JPanel();
@@ -139,6 +141,8 @@ public class TodoListUI extends JFrame {
         tools.add(viewComplete);
     }
 
+    // MODIFIES: this
+    // EFFECTS: constructs the area where users can create the item to be added
     private void createAddPanel(JPanel addPanel) {
         addPanel.setLayout(new GridBagLayout());
         addPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -207,6 +211,8 @@ public class TodoListUI extends JFrame {
 
     }
 
+    // MODIFIES: this
+    // EFFECTS: constructs the area where the user can input the item they want to be completed
     private void createCompletePanel(JPanel completePanel) {
         completePanel.setLayout(new GridBagLayout());
         completePanel.setBorder(BorderFactory.createCompoundBorder(
@@ -232,6 +238,8 @@ public class TodoListUI extends JFrame {
 
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds the given item to the list
     public void addItem(Item i){
         try {
             itemList.addItem(i);
@@ -241,6 +249,8 @@ public class TodoListUI extends JFrame {
         }
     }
 
+    // MODIFIES: this
+    // EFFECTS: completes the item with the given name
     public void completeItem(String name) {
         try {
             itemList.completeItem(name);
@@ -250,48 +260,64 @@ public class TodoListUI extends JFrame {
         }
     }
 
+    // EFFECTS: prints the current to do list items
     public void viewCurrent(ItemList itemList) {
-        String currentItems = itemList.printCurrentItems();
+        String currentItems = "Current items to do: " +itemList.printCurrentItems();
         setText(currentItems);
     }
 
+    // EFFECTS: prints the completed items
     public void viewComplete(ItemList itemList) {
-        String text = itemList.printCompletedItems();
-        setText(text);
+        String completedItems = "Completed items: " +itemList.printCompletedItems();
+        setText(completedItems);
     }
 
+    // MODIFIES: this
+    // EFFECTS: loads the to do list
     private void loadList(ItemList todoList) throws IOException{
         todoList.load(todoList);
     }
 
+    // EFFECTS: gets the text in the name field in the add area
     public String getAddName() {
         return addNameField.getFieldText();
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets the name field in the add area to empty
     public void setAddNameField() {
         addNameField.setEmpty();
     }
 
+    // EFFECTS: gets the text in the name field in the complete area
     public String getCompleteName() {
         return completeNameField.getFieldText();
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets the name field in the complete area to empty
     public void setCompleteNameField() {
         completeNameField.setEmpty();
     }
 
+    // EFFECTS: gets the item type the combo box is set on
     public String getSelected() {
         return (String)itemType.getSelectedItem();
     }
 
+    // MODIFIES: this
+    // EFFECTS: resets the combobox value
     public void setItemType() {
         itemType.setSelectedIndex(0);
     }
 
+    // EFFECTS: gets the text in the date field in the add area
     public String getDueDate() {
         return dateField.getFieldText();
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets the date field in the add area to empty
     public void setDateField() {
         dateField.setEmpty();
     }

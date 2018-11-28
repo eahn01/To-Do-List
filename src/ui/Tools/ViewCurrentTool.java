@@ -13,17 +13,22 @@ public class ViewCurrentTool extends ViewTool {
         super(todoList, parent, gc);
     }
 
+    // MODIFIES: this
+    // EFFECTS: constructs a new listener object and adds it to the button
     @Override
     protected void addListener() {
         button.addActionListener(new ViewCurrentToolClickHandler());
     }
 
+    // EFFECTS: returns the string "view current"
     @Override
     protected String getLabel() {
         return "View Current";
     }
 
     private class ViewCurrentToolClickHandler implements ActionListener {
+
+        // EFFECTS: when button pressed, print all current items
         @Override
         public void actionPerformed(ActionEvent e) {
            Toolkit.getDefaultToolkit().beep();
